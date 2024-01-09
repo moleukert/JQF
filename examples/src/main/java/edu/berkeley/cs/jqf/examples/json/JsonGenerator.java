@@ -19,14 +19,22 @@ public class JsonGenerator extends Generator<String> {
 
     private GenerationStatus status;
 
-    private static final int MAX_WS_DEPTH = 3;
-    private static final int MAX_RECURSION_DEPTH = 85;
+    private static final int MAX_RECURSION_DEPTH = 50;
     private static final int MIN_MEMBERS_DEPTH = 10;
-    private static final int MIN_CHAR_DEPTH = 10;
     private static final int MIN_ELEMENTS_DEPTH = 10;
+
+    private static final int MAX_WS_DEPTH = 3;
+
+    private static final int MAX_DIGIT_DEPTH = 30;
+    private static final int MIN_DIGIT_DEPTH = 5;
+
+    private static final int MAX_CHAR_DEPTH = 30;
+    private static final int MIN_CHAR_DEPTH = 5;
 
     private int currentDepth;
     private int currentwsDepth;
+    private int currentDigitDepth;
+    private int currentCharDepth;
 
     private static final String[] whitespacevariants = {
             " ", "\n", "\r", "\t"
@@ -41,6 +49,9 @@ public class JsonGenerator extends Generator<String> {
         this.status = status;
         this.currentDepth = 0;
         this.currentwsDepth = 0;
+        this.currentCharDepth = 0;
+        this.currentDigitDepth = 0;
+
         String input = generateElement(random).toString();
         double zufall;
         while (true) {
@@ -180,12 +191,12 @@ public class JsonGenerator extends Generator<String> {
 
     private String generateCharacters(SourceOfRandomness random) {
         String character;
-        if ((currentDepth >= MAX_RECURSION_DEPTH || random.nextBoolean()) && currentDepth >= MIN_CHAR_DEPTH) {
+        if ((currentCharDepth >= MAX_CHAR_DEPTH || random.nextBoolean()) && currentCharDepth >= MIN_CHAR_DEPTH) {
             character = "";
         } else {
-            currentDepth++;
+            currentCharDepth++;
             character = generateCharacter(random) + generateCharacters(random);
-            currentDepth--;
+            currentCharDepth--;
         }
         return character;
     }
@@ -277,17 +288,13 @@ public class JsonGenerator extends Generator<String> {
     }
 
     private String generateDigits(SourceOfRandomness random) {
-        if (currentDepth >= MAX_RECURSION_DEPTH) {
-            return generateDigit(random);
-        }
         String digits;
-        if (random.nextBoolean()) {
-
+        if ((currentDigitDepth >= MAX_DIGIT_DEPTH || random.nextBoolean()) && currentDigitDepth >= MIN_DIGIT_DEPTH) {
             digits = generateDigit(random);
         } else {
-            currentDepth++;
+            currentDigitDepth++;
             digits = generateDigit(random) + generateDigits(random);
-            currentDepth--;
+            currentDigitDepth--;
         }
         return digits;
     }
