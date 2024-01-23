@@ -30,6 +30,7 @@
 package edu.berkeley.cs.jqf.fuzz.ei;
 
 import java.io.File;
+import java.time.Duration;
 
 import edu.berkeley.cs.jqf.fuzz.junit.GuidedFuzzing;
 import org.junit.runner.Result;
@@ -42,36 +43,38 @@ import org.junit.runner.Result;
 public class ZestDriver {
 
     public static void main(String[] args) {
-        if (args.length < 2){
-            System.err.println("Usage: java " + ZestDriver.class + " TEST_CLASS TEST_METHOD [OUTPUT_DIR [SEED_DIR | SEED_FILES...]]");
+        if (args.length < 2) {
+            System.err.println("Usage: java " + ZestDriver.class
+                    + " TEST_CLASS TEST_METHOD [OUTPUT_DIR [SEED_DIR | SEED_FILES...]]");
             System.exit(1);
         }
 
-        String testClassName  = args[0];
+        String testClassName = args[0];
         String testMethodName = args[1];
         String outputDirectoryName = args.length > 2 ? args[2] : "fuzz-results";
         File outputDirectory = new File(outputDirectoryName);
         File[] seedFiles = null;
         if (args.length > 3) {
-            seedFiles = new File[args.length-3];
+            seedFiles = new File[args.length - 3];
             for (int i = 3; i < args.length; i++) {
-                seedFiles[i-3] = new File(args[i]);
+                seedFiles[i - 3] = new File(args[i]);
             }
         }
 
         try {
             // Load the guidance
-            String title = testClassName+"#"+testMethodName;
+            String title = testClassName + "#" + testMethodName;
             ZestGuidance guidance = null;
-
+            // change the duration of all guidance
+            Duration duration = null;
+            // duration = Duration.parse("PT" + "10s");
             if (seedFiles == null) {
-                guidance = new ZestGuidance(title, null, outputDirectory);
+                guidance = new ZestGuidance(title, duration, outputDirectory);
             } else if (seedFiles.length == 1 && seedFiles[0].isDirectory()) {
-                guidance = new ZestGuidance(title, null, outputDirectory, seedFiles[0]);
+                guidance = new ZestGuidance(title, duration, outputDirectory, seedFiles[0]);
             } else {
-                guidance = new ZestGuidance(title, null, outputDirectory, seedFiles);
+                guidance = new ZestGuidance(title, duration, outputDirectory, seedFiles);
             }
-
 
             // Run the Junit test
             Result res = GuidedFuzzing.run(testClassName, testMethodName, guidance, System.out);
