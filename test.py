@@ -9,20 +9,24 @@ def run_command(command:list,args:list):
         else:
             command.append(arg)
     try:
-        process = subprocess.run(command, check=True, text=True, capture_output=True, timeout=900)
+        process = subprocess.run(command, check=True, text=True, capture_output=True, timeout=180)
         print("Subprocess completed successfully.")
         print("Output:", process.stdout)
     # this only hides the errors caused by the forced timeout in guidance
     except subprocess.TimeoutExpired:
-        print("Subprocess timed out after 900 seconds.")
+        print("Subprocess timed out after 180 seconds.")
     except subprocess.CalledProcessError as e:
         print("Subprocess failed with return code:", e.returncode)
         print("Error:", e.stderr)
 
 
 
-def bash_test():
+def bash_test_gson():
     # command without test method (for spezialization)
+    test_all_1 = False
+    test_1_5 = True
+    method = 'fuzzJSONParser_ascii'
+    target_direct = 'plot_results/'
     command =[
     'bin/jqf-zest',
     '-f',
@@ -30,15 +34,23 @@ def bash_test():
     subprocess.check_output(['scripts/examples_classpath.sh'], text=True).strip(),
     'edu.berkeley.cs.jqf.examples.gson.gson_test'
     ]
+    if test_all_1:
+        test_methods = [['fuzzJSONParser_mut','result-full'],
+                        ['fuzzJSONParser_nomut','result-nomut'],
+                        ['fuzzJSONParser_ascii','result-ascii-full'],
+                        ['fuzzJSONdeser_mut','result-mut-deser'],
+                        ['fuzzJSONmin_ascii','result-ascii-min'],
+                        ['fuzzJSONmin_mut','result-mut-min'],
+                        ['fuzzJSONParser_mut','result-full-random','r']
+                        ]
+    elif test_1_5:
+        command.append(method)
+        test_methods = []
+        
+        for i in range(5):
+          test_methods.append([target_direct+ 'gson_results_ascii/result'+str(i)])  
+    
 
-    test_methods = [['fuzzJSONParser_mut','result-full'],
-                    ['fuzzJSONParser_nomut','result-nomut'],
-                    ['fuzzJSONParser_ascii','result-ascii-full'],
-                    ['fuzzJSONdeser_mut','result-mut-deser'],
-                    ['fuzzJSONmin_ascii','result-ascii-min'],
-                    ['fuzzJSONmin_mut','result-mut-min'],
-                    ['fuzzJSONParser_mut','result-full-random','r']
-                    ]
     with concurrent.futures.ProcessPoolExecutor(max_workers=len(test_methods)) as executor:
         
         futures = {executor.submit(run_command,command,arg): arg for arg in test_methods}
@@ -47,7 +59,8 @@ def bash_test():
 
 
 def main():
-    bash_test()
+    bash_test_gson()
+    pass
 
 if __name__ == "__main__":
     main()
