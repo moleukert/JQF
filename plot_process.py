@@ -29,7 +29,7 @@ def process_plot_data(path: str)-> pd.DataFrame:
     return time_based_data
 
 def get_final_df(path:str)->pd.DataFrame:
-    path = os.path.join("/home/moleu/Uni/semesterproject2023/Semesterproject2023/report_test/JQF/plot_results",path)
+    path = os.path.join("plot_tests/jsonio",path)
     dataframes = []
     for i in range(5):
         data = process_plot_data(os.path.join(path,"result"+str(i)))
@@ -42,7 +42,7 @@ def get_final_df(path:str)->pd.DataFrame:
 
 def plot_box():
 
-    variants = ["gson_results_full", "gson_results_nomut", "gson_results_ascii"]
+    variants = ["results_mut", "results_nomut", "results_ascii"]
     dataframes = []
     for variant in variants:
         final = get_final_df(variant)
@@ -53,7 +53,7 @@ def plot_box():
     
     sns.boxplot(x='variant',y= "all_covered_probes", data=data_combined)
      
-    plt.savefig('plot_tests/final_coverage_box.pdf')
+    plt.savefig('plots/jsonio/final_coverage_box.pdf')
 
 
 
@@ -62,9 +62,9 @@ def plot_box():
 
 def plot_median():
     # replace with own path to directory
-    path = "/home/moleu/Uni/semesterproject2023/Semesterproject2023/report_test/JQF/plot_results/gson_results_nomut"
+    path = "plot_tests/jsonio/results_ascii"
     dataframes = []
-    for i in range(5):
+    for i in range(10):
         data = process_plot_data(os.path.join(path,"result"+str(i)))
         dataframes.append(data)
 
@@ -85,11 +85,11 @@ def plot_median():
     plt.title('Coverage Over Time')
 
     # Save the plot
-    plt.savefig('plot_tests/nomut_coverage_median.pdf')
+    plt.savefig('plots/jsonio/ascii_coverage_median.pdf')
     plt.close()
 
 def plot():
-    path = "/home/moleu/Uni/semesterproject2023/Semesterproject2023/report_test/JQF/result-full"
+    path = "result-full"
     data = process_plot_data(path)
 
     sns.set_style("whitegrid")

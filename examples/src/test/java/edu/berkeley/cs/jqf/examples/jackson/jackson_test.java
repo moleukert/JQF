@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
+import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.pholser.junit.quickcheck.From;
 import edu.berkeley.cs.jqf.examples.json.JsonGenerator_mut;
@@ -16,6 +17,8 @@ import edu.berkeley.cs.jqf.fuzz.Fuzz;
 
 import java.util.Map;
 
+import static mjson.Json.factory;
+import static mjson.Json.make;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Assume;
@@ -27,7 +30,7 @@ public class jackson_test {
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @Fuzz
-    public void fuzzJSONParser(@From(JsonGenerator_mut.class) String input) {
+    public void fuzzJSONParser_mut(@From(JsonGenerator_mut.class) String input) {
         try {
             objectMapper.readValue(input, Object.class);
             // JSON to JAVA Object
@@ -53,6 +56,9 @@ public class jackson_test {
 
             // Serialize JsonNode tree back to a string
             String conv_tree = objectMapper.writeValueAsString(jsonTree);
+
+            // JsonFactory factory = new JsonFactory();
+            // factory.createParser(input);
 
         }
 

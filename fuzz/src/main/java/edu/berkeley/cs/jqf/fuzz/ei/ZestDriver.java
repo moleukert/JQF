@@ -67,7 +67,7 @@ public class ZestDriver {
             ZestGuidance guidance = null;
             // change the duration of all guidance
             Duration duration = null;
-            // duration = Duration.parse("PT" + "180s");
+            duration = Duration.parse("PT" + "10s");
             if (seedFiles == null) {
                 guidance = new ZestGuidance(title, duration, outputDirectory);
             } else if (seedFiles.length == 1 && seedFiles[0].isDirectory()) {

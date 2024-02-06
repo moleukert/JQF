@@ -131,7 +131,7 @@ public class gson_test {
 
     // test method for full driver with only ascii_generator
     @Fuzz
-    public void fuzzJSONParser_ascii(@From(JsonGenerator_mut.class) String input) {
+    public void fuzzJSONParser_ascii(@From(AsciiStringGenerator.class) String input) {
         // public void fuzzJSONParser(@From(AsciiStringGenerator.class) String input) {
         // test standard deserialization with gson
         try {
