@@ -29,7 +29,7 @@ def process_plot_data(path: str)-> pd.DataFrame:
     return time_based_data
 
 def get_final_df(path:str)->pd.DataFrame:
-    path = os.path.join("plot_tests/jsonio",path)
+    path = os.path.join("plot_tests/jackson",path)
     dataframes = []
     for i in range(5):
         data = process_plot_data(os.path.join(path,"result"+str(i)))
@@ -53,7 +53,7 @@ def plot_box():
     
     sns.boxplot(x='variant',y= "all_covered_probes", data=data_combined)
      
-    plt.savefig('plots/jsonio/final_coverage_box.pdf')
+    plt.savefig('plots/jackson/final_coverage_box.pdf')
 
 
 
@@ -62,7 +62,7 @@ def plot_box():
 
 def plot_median():
     # replace with own path to directory
-    path = "plot_tests/jsonio/results_ascii"
+    path = "plot_tests/jackson/results_ascii"
     dataframes = []
     for i in range(10):
         data = process_plot_data(os.path.join(path,"result"+str(i)))
@@ -85,31 +85,13 @@ def plot_median():
     plt.title('Coverage Over Time')
 
     # Save the plot
-    plt.savefig('plots/jsonio/ascii_coverage_median.pdf')
+    plt.savefig('plots/jackson/ascii_coverage_median.pdf')
     plt.close()
-
-def plot():
-    path = "result-full"
-    data = process_plot_data(path)
-
-    sns.set_style("whitegrid")
-    
-    sns.lineplot(data=data,x="# unix_time", y='total_inputs',errorbar=("sd",95))
-
-    plt.xlabel('Unix Time')
-    plt.ylabel('Total Coverage')
-    plt.title('Coverage Over Time')
-
-    # Show the plot
-    plt.show(block=True)
-    plt.savefig('full_coverage.pdf')
-    plt.close()
-    x = data['# unix_time'][0]
-    print(x)
 
 def main():
     #plot_median()
     plot_box()
+    pass
 
 if __name__ == "__main__":
     main()

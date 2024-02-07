@@ -11,7 +11,10 @@ import com.fasterxml.jackson.databind.node.JsonNodeType;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.pholser.junit.quickcheck.From;
+
+import edu.berkeley.cs.jqf.examples.common.AsciiStringGenerator;
 import edu.berkeley.cs.jqf.examples.json.JsonGenerator_mut;
+import edu.berkeley.cs.jqf.examples.json.JsonGenerator_nomut;
 import edu.berkeley.cs.jqf.fuzz.JQF;
 import edu.berkeley.cs.jqf.fuzz.Fuzz;
 
@@ -74,4 +77,93 @@ public class jackson_test {
 
     }
 
+    @Fuzz
+    public void fuzzJSONParser_nomut(@From(JsonGenerator_nomut.class) String input) {
+        try {
+            objectMapper.readValue(input, Object.class);
+            // JSON to JAVA Object
+            Map<String, Object> jsonMap = objectMapper.readValue(input, Map.class);
+            // JAVA Object to JSon
+            String jsonString = objectMapper.writeValueAsString(jsonMap);
+            // JSON String to JAVA Map
+            Map<String, Object> map = objectMapper.readValue(input, new TypeReference<Map<String, Object>>() {
+            });
+            // Deserialize input string to a JsonNode
+            JsonNode jsonNode = objectMapper.readTree(input);
+
+            // Serialize JsonNode back to a string
+            String conv_json = objectMapper.writeValueAsString(jsonNode);
+
+            String prettyJsonString = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNode);
+
+            // Test if the strings are the same
+            // assertEquals(input, jsonNode.toString());
+
+            // Convert JsonNode to a tree of JsonNodes
+            JsonNode jsonTree = jsonNode.deepCopy();
+
+            // Serialize JsonNode tree back to a string
+            String conv_tree = objectMapper.writeValueAsString(jsonTree);
+
+            // JsonFactory factory = new JsonFactory();
+            // factory.createParser(input);
+
+        }
+
+        catch (JsonParseException e) {
+            Assume.assumeNoException(e);
+        } catch (JsonMappingException e) {
+            Assume.assumeNoException(e);
+        } catch (JsonProcessingException e) {
+            Assume.assumeNoException(e);
+        } catch (IOException e) {
+            Assume.assumeNoException(e);
+        }
+
+    }
+
+    @Fuzz
+    public void fuzzJSONParser_ascii(@From(AsciiStringGenerator.class) String input) {
+        try {
+            objectMapper.readValue(input, Object.class);
+            // JSON to JAVA Object
+            Map<String, Object> jsonMap = objectMapper.readValue(input, Map.class);
+            // JAVA Object to JSon
+            String jsonString = objectMapper.writeValueAsString(jsonMap);
+            // JSON String to JAVA Map
+            Map<String, Object> map = objectMapper.readValue(input, new TypeReference<Map<String, Object>>() {
+            });
+            // Deserialize input string to a JsonNode
+            JsonNode jsonNode = objectMapper.readTree(input);
+
+            // Serialize JsonNode back to a string
+            String conv_json = objectMapper.writeValueAsString(jsonNode);
+
+            String prettyJsonString = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNode);
+
+            // Test if the strings are the same
+            // assertEquals(input, jsonNode.toString());
+
+            // Convert JsonNode to a tree of JsonNodes
+            JsonNode jsonTree = jsonNode.deepCopy();
+
+            // Serialize JsonNode tree back to a string
+            String conv_tree = objectMapper.writeValueAsString(jsonTree);
+
+            // JsonFactory factory = new JsonFactory();
+            // factory.createParser(input);
+
+        }
+
+        catch (JsonParseException e) {
+            Assume.assumeNoException(e);
+        } catch (JsonMappingException e) {
+            Assume.assumeNoException(e);
+        } catch (JsonProcessingException e) {
+            Assume.assumeNoException(e);
+        } catch (IOException e) {
+            Assume.assumeNoException(e);
+        }
+
+    }
 }

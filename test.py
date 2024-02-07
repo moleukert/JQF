@@ -1,5 +1,19 @@
 import subprocess
 import concurrent.futures
+import time
+
+
+def timer(seconds :int):
+    start_time = time.time()
+    while True:
+        elapsed_time = time.time() - start_time
+        print(f"Elapsed Time: {elapsed_time:.2f} seconds", end="\r")
+        if elapsed_time >= seconds:
+            break
+        time.sleep(0.1)  # Adjust the sleep duration as needed for accuracy and performance
+
+    print("\nTimer finished!")
+
 
 def run_command(command:list,args:list):
     # complete command with arguments for test cases
@@ -25,14 +39,14 @@ def bash_test():
     # command without test method (for spezialization)
     test_all_1 = False
     test_1_5 = True
-    method = 'fuzzJsonReadValue_ascii'
+    method = 'fuzzJSONParser_nomut'
     target_direct = 'plot_tests/'
     command =[
     'bin/jqf-zest',
     '-f',
     '-c',
     subprocess.check_output(['scripts/examples_classpath.sh'], text=True).strip(),
-    'edu.berkeley.cs.jqf.examples.jsonio.JsonIO'
+    'edu.berkeley.cs.jqf.examples.jackson.jackson_test'
     ]
     if test_all_1:
         test_methods = [['fuzzJSONParser_mut','result-full'],
@@ -48,15 +62,14 @@ def bash_test():
         test_methods = []
         
         for i in range(5):
-          test_methods.append([target_direct+ 'jsonio/results_ascii/result'+str(i+5)])  
+          test_methods.append([target_direct+ 'jackson/results_nomut/result'+str(i+5)])  
     
     
     with concurrent.futures.ProcessPoolExecutor(max_workers=len(test_methods)) as executor:
         
         futures = {executor.submit(run_command,command,arg): arg for arg in test_methods}
-
+        timer(600)
         concurrent.futures.wait(futures)
-
 
 def main():
     bash_test()
