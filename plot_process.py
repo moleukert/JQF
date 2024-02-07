@@ -31,7 +31,7 @@ def process_plot_data(path: str)-> pd.DataFrame:
 def get_final_df(path:str)->pd.DataFrame:
     path = os.path.join("plot_tests/jackson",path)
     dataframes = []
-    for i in range(5):
+    for i in range(10):
         data = process_plot_data(os.path.join(path,"result"+str(i)))
         dataframes.append(data)
     
@@ -62,7 +62,7 @@ def plot_box():
 
 def plot_median():
     # replace with own path to directory
-    path = "plot_tests/jackson/results_ascii"
+    path = "plot_tests/mjson/results_nomut"
     dataframes = []
     for i in range(10):
         data = process_plot_data(os.path.join(path,"result"+str(i)))
@@ -75,7 +75,7 @@ def plot_median():
     filtered = merged_df[merged_df['# unix_time']<= min_end_time]
     result = filtered.groupby('# unix_time')['all_covered_probes'].median().reset_index()
     
-    result.to_csv('output.csv')
+    #result.to_csv('output.csv')
     sns.set_style("whitegrid")
     
     sns.lineplot(data=result,x="# unix_time", y='all_covered_probes')
@@ -85,7 +85,7 @@ def plot_median():
     plt.title('Coverage Over Time')
 
     # Save the plot
-    plt.savefig('plots/jackson/ascii_coverage_median.pdf')
+    plt.savefig('plots/mjsonx/nomut_coverage_median.pdf')
     plt.close()
 
 def main():
