@@ -24,6 +24,7 @@ public class mjson_test {
     public void fuzzJSONParser_mut(@From(JsonGenerator_mut.class) String input) {
 
         try {
+            System.out.println(input);
             Json t = Json.make(input);
             Json t2 = Json.factory().string(input);
             Json tdup = t.dup();
@@ -31,11 +32,6 @@ public class mjson_test {
             Assert.assertEquals(t, t2);
 
             Json.read(input);
-
-            // Json obj = object();
-            // Json s = make(input);
-            // obj.set("test", s);
-            // Assert.assertTrue(obj == s.up());
 
         } catch (MalformedJsonException e) {
             Assume.assumeNoException(e);
@@ -47,6 +43,7 @@ public class mjson_test {
     public void fuzzJSONParser_nomut(@From(JsonGenerator_nomut.class) String input) {
 
         try {
+
             Json t = Json.make(input);
             Json t2 = Json.factory().string(input);
             Json tdup = t.dup();

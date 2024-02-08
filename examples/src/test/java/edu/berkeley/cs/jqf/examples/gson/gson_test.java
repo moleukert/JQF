@@ -25,7 +25,6 @@ import org.junit.runner.RunWith;
 public class gson_test {
 
     private Gson gson = new Gson();
-    // Gson custom = new GsonBuilder().create();
 
     // test method for full test with full generator
     @Fuzz
@@ -45,19 +44,12 @@ public class gson_test {
             // convert tree back to string
             String conv_tree = gson.toJson(json_tree);
 
-            // test if the strings are the same (they should be)
-            // assertEquals(conv_json, conv_tree);
-
             // parse the input string to a parse tree of jsonelements
             JsonElement parse_tree = JsonParser.parseString(input);
 
             // convert the parse tree back to a string
             String conv_parsetree = gson.toJson(parse_tree);
             parse_tree.toString();
-
-            // System.out.println("input: " + input + "\nConvert: " + conv_json +
-            // "\nConverttree: " + conv_tree
-            // + "\nConvert parse tree: " + conv_parsetree + "\n");
 
         } catch (JsonSyntaxException e) {
             Assume.assumeNoException(e);
@@ -66,15 +58,6 @@ public class gson_test {
         } catch (JsonParseException e) {
             Assume.assumeNoException(e);
         }
-        // doesnt work, builder methode not found
-        // // test deserialization with custom gson
-        // try {
-        // gson.fromJson(input, Object.class);
-        // } catch (JsonSyntaxException e) {
-        // Assume.assumeNoException(e);
-        // } catch (JsonIOException e) {
-        // Assume.assumeNoException(e);
-        // }
 
     }
 
@@ -84,6 +67,7 @@ public class gson_test {
         // public void fuzzJSONParser(@From(AsciiStringGenerator.class) String input) {
         // test standard deserialization with gson
         try {
+
             // convert input string into object
             Object object = gson.fromJson(input, Object.class);
 
@@ -96,19 +80,12 @@ public class gson_test {
             // convert tree back to string
             String conv_tree = gson.toJson(json_tree);
 
-            // test if the strings are the same (they should be)
-            // assertEquals(conv_json, conv_tree);
-
             // parse the input string to a parse tree of jsonelements
             JsonElement parse_tree = JsonParser.parseString(input);
 
             // convert the parse tree back to a string
             String conv_parsetree = gson.toJson(parse_tree);
             parse_tree.toString();
-
-            // System.out.println("input: " + input + "\nConvert: " + conv_json +
-            // "\nConverttree: " + conv_tree
-            // + "\nConvert parse tree: " + conv_parsetree + "\n");
 
         } catch (JsonSyntaxException e) {
             Assume.assumeNoException(e);
@@ -117,15 +94,6 @@ public class gson_test {
         } catch (JsonParseException e) {
             Assume.assumeNoException(e);
         }
-        // doesnt work, builder methode not found
-        // // test deserialization with custom gson
-        // try {
-        // gson.fromJson(input, Object.class);
-        // } catch (JsonSyntaxException e) {
-        // Assume.assumeNoException(e);
-        // } catch (JsonIOException e) {
-        // Assume.assumeNoException(e);
-        // }
 
     }
 
@@ -147,19 +115,12 @@ public class gson_test {
             // convert tree back to string
             String conv_tree = gson.toJson(json_tree);
 
-            // test if the strings are the same (they should be)
-            // assertEquals(conv_json, conv_tree);
-
             // parse the input string to a parse tree of jsonelements
             JsonElement parse_tree = JsonParser.parseString(input);
 
             // convert the parse tree back to a string
             String conv_parsetree = gson.toJson(parse_tree);
             parse_tree.toString();
-
-            // System.out.println("input: " + input + "\nConvert: " + conv_json +
-            // "\nConverttree: " + conv_tree
-            // + "\nConvert parse tree: " + conv_parsetree + "\n");
 
         } catch (JsonSyntaxException e) {
             Assume.assumeNoException(e);
@@ -168,15 +129,6 @@ public class gson_test {
         } catch (JsonParseException e) {
             Assume.assumeNoException(e);
         }
-        // doesnt work, builder methode not found
-        // // test deserialization with custom gson
-        // try {
-        // gson.fromJson(input, Object.class);
-        // } catch (JsonSyntaxException e) {
-        // Assume.assumeNoException(e);
-        // } catch (JsonIOException e) {
-        // Assume.assumeNoException(e);
-        // }
 
     }
 

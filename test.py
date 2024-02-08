@@ -39,7 +39,7 @@ def bash_test():
     # command without test method (for spezialization)
     test_all_1 = False
     test_1_5 = True
-    method = 'fuzzJSONParser_ascii'
+    method = 'fuzzJSONParser_mut'
     target_direct = 'plot_tests/'
     command =[
     'bin/jqf-zest',
@@ -61,8 +61,8 @@ def bash_test():
         command.append(method)
         test_methods = []
         
-        for i in range(5):
-          test_methods.append([target_direct+ 'mjson/results_ascii/result'+str(i+5)])  
+        for i in range(2):
+          test_methods.append([target_direct+ 'mjson/results_mut/result'+str(i+3)])  
     
     
     with concurrent.futures.ProcessPoolExecutor(max_workers=len(test_methods)) as executor:
