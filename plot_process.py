@@ -27,7 +27,7 @@ def process_plot_data(path: str)-> pd.DataFrame:
     return time_based_data
 
 def get_final_df(path:str)->pd.DataFrame:
-    path = os.path.join("plot_tests/mjson",path)
+    path = os.path.join("plot_tests/jackson",path)
     dataframes = []
     for i in range(10):
         data = process_plot_data(os.path.join(path,"result"+str(i)))
@@ -44,20 +44,35 @@ def plot_box():
     dataframes = []
     for variant in variants:
         final = get_final_df(variant)
-        final_v = final.assign(variant=variant)
+        final_v = final.assign(Generator=variant)
         dataframes.append(final_v)
 
     data_combined = pd.concat(dataframes, ignore_index=True)
 
-    sns.boxplot(x='variant',y= "all_covered_probes", data=data_combined)
-     
-    plt.savefig('plots/mjson/final_coverage_box.pdf')
+    sns.boxplot(x='Generator',y= "valid_covered_probes", data=data_combined)
+
+    plt.savefig('plots/jackson/final_valid_coverage_box.pdf')
+
+def plot_single():
+    path = "plot_tests/jsonio/results_asciih"
+    data = process_plot_data(path)
+    sns.set_style("whitegrid")
+    
+    sns.lineplot(data=data,x="# unix_time", y='all_covered_probes')
+    sns.lineplot(data=data,x="# unix_time", y='valid_covered_probes')
+    plt.xlabel('Unix Time')
+    plt.ylabel('Total Coverage')
+    plt.title('Coverage Over Time')
+
+    # Save the plot
+    plt.savefig('plots/jsonio/asciih_coverage.pdf')
+    plt.close()
 
 
 
 def plot_median():
     # replace with own path to directory
-    path = "plot_tests/mjson/results_mut"
+    path = "plot_tests/jackson/results_nomut"
     dataframes = []
     for i in range(10):
         data = process_plot_data(os.path.join(path,"result"+str(i)))
@@ -72,7 +87,8 @@ def plot_median():
 
     result_valid= filtered.groupby('# unix_time')['valid_covered_probes'].median().reset_index()
 
-    #result_valid.to_csv('output.csv')
+    result_valid.to_csv(os.path.join(path,"result_median_valid.csv"))
+
     sns.set_style("whitegrid")
     
     sns.lineplot(data=result,x="# unix_time", y='all_covered_probes')
@@ -82,12 +98,13 @@ def plot_median():
     plt.title('Coverage Over Time')
 
     # Save the plot
-    plt.savefig('plots/mjson/mut_coverage_median.pdf')
+    #plt.savefig('plots/jackson/nomut_coverage_median.pdf')
     plt.close()
 
 def main():
-    plot_median()
-    #plot_box()
+    #plot_single()
+    plot_box()
+    #plot_median()
     pass
 
 if __name__ == "__main__":
